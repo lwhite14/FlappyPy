@@ -1,5 +1,6 @@
-
+from data.GameSession import GameSession
 
 
 if __name__ == "__main__":
-    print("Hello World!")
+    gameSession = GameSession()
+    gameSession.GameLoop()
