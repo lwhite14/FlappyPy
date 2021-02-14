@@ -43,4 +43,4 @@ class Bird:
             print("Died!")
 
     def Draw(self, screen):
-        pygame.draw.rect(screen, (255,0,0), (self.posX, self.posY, 20, 20))
+        pygame.draw.rect(screen, (255,255,0), (self.posX, self.posY, 20, 20))

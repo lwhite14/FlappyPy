@@ -3,7 +3,7 @@ import pygame
 from pygame.locals import *
 
 from data.Player import Bird
-from data.Obstacle import Ground
+from data.Obstacle import Ground, Pipe
 
 
 class GameSession:
@@ -16,6 +16,7 @@ class GameSession:
 
         self.bird = Bird()
         self.ground = Ground()
+        self.pipes = [Pipe(450), Pipe(650), Pipe(850)]
 
 
     def GameLoop(self):
@@ -42,10 +43,17 @@ class GameSession:
 
     def Update(self):
         self.bird.Update()
+        for pipe in self.pipes:
+            pipe.Update()
 
         self.bird.Collide(self.ground.rect)
+        for pipe in self.pipes:
+            for rect in pipe.rects:
+                self.bird.Collide(rect)
 
 
     def Draw(self):
         self.bird.Draw(self.screen)
         self.ground.Draw(self.screen)
+        for pipe in self.pipes:
+            pipe.Draw(self.screen)
