@@ -2,23 +2,34 @@ import pygame
 
 class Bird:
     def __init__(self):
-        self.posX = 200
+        self.posX = 160
         self.posY = 300
 
         self.fallingValue = 1
         self.GRAVITY = 1.15
 
+        self.isJumping = False
+        self.jumpCounterTotal = 2
+
+        self.jumpCounter = 0 
+
     def Update(self):
         self.Gravity()
 
     def Gravity(self):
-        if not self.jumping:
+        if self.isJumping:
+            self.posY -= 37.5
+            self.jumpCounter += 1
+            if self.jumpCounter == self.jumpCounterTotal:
+                self.isJumping = False
+                self.jumpCounter = 0
+                self.fallingValue = 1
+        else:
             self.posY += self.fallingValue
             self.fallingValue *= self.GRAVITY
 
     def Jump(self):
-        self.posY -= 150
-        self.fallingValue = 1
+        self.isJumping = True
 
 
     def Draw(self, screen):

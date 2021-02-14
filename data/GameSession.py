@@ -10,7 +10,7 @@ class GameSession:
         pygame.init()
         self.fps = 30
         self.fpsClock = pygame.time.Clock()
-        self.width, self.height = 600, 600
+        self.width, self.height = 400, 600
         self.screen = pygame.display.set_mode((self.width, self.height))
 
         self.bird = Bird()
