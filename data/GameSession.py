@@ -1,15 +1,19 @@
 import sys
 import pygame
-from pygame.locals import QUIT
+from pygame.locals import *
+
+from data.Player import Bird
 
 
 class GameSession:
     def __init__(self):
         pygame.init()
-        self.fps = 10
+        self.fps = 30
         self.fpsClock = pygame.time.Clock()
-        self.width, self.height = 400, 400
+        self.width, self.height = 600, 600
         self.screen = pygame.display.set_mode((self.width, self.height))
+
+        self.bird = Bird()
 
 
     def GameLoop(self):
@@ -20,18 +24,23 @@ class GameSession:
                 if event.type == QUIT:
                     pygame.quit()
                     sys.exit()
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_SPACE:
+                        self.bird.Jump()
 
-                    self.Update()
+            #Update
+            self.Update()
 
-                    self.Draw(self.screen)
+            #Draw
+            self.Draw()
 
-                pygame.display.flip()
-                self.fpsClock.tick(self.fps)
+            pygame.display.flip()
+            self.fpsClock.tick(self.fps)
 
 
     def Update(self):
-        pass
+        self.bird.Update()
 
 
-    def Draw(self, screen):
-        pass
+    def Draw(self):
+        self.bird.Draw(self.screen)
