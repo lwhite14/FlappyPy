@@ -3,6 +3,7 @@ import pygame
 from pygame.locals import *
 
 from data.Player import Bird
+from data.Obstacle import Ground
 
 
 class GameSession:
@@ -14,6 +15,7 @@ class GameSession:
         self.screen = pygame.display.set_mode((self.width, self.height))
 
         self.bird = Bird()
+        self.ground = Ground()
 
 
     def GameLoop(self):
@@ -41,6 +43,9 @@ class GameSession:
     def Update(self):
         self.bird.Update()
 
+        self.bird.Collide(self.ground.rect)
+
 
     def Draw(self):
         self.bird.Draw(self.screen)
+        self.ground.Draw(self.screen)
