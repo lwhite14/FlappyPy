@@ -11,6 +11,7 @@ from data.Obstacle import Ground, Pipe
 class GameSession:
     def __init__(self):
         pygame.init()
+        self.runningGame = True
         self.fps = 30
         self.fpsClock = pygame.time.Clock()
         self.width, self.height = 400, 600
@@ -23,13 +24,12 @@ class GameSession:
 
 
     def GameLoop(self):
-        while True:
+        while self.runningGame:
             self.screen.fill((135,206,250))
 
             for event in pygame.event.get():
                 if event.type == QUIT:
-                    pygame.quit()
-                    sys.exit()
+                    self.runningGame = False
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_SPACE:
                         self.bird.Jump()
@@ -42,6 +42,9 @@ class GameSession:
 
             pygame.display.flip()
             self.fpsClock.tick(self.fps)
+
+        pygame.quit()
+        sys.exit()
 
 
     def Update(self):
