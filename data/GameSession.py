@@ -3,6 +3,7 @@ import os
 import pygame
 import pygame.freetype
 from pygame.locals import *
+from pygame import Rect
 
 from data.Player import Bird
 from data.Obstacle import Ground, Pipe
@@ -21,11 +22,12 @@ class GameSession:
         self.ground = Ground()
         self.pipes = [Pipe(450), Pipe(650), Pipe(850)]
         self.score = Score()
+        self.backDrop = BackDrop()
 
 
     def GameLoop(self):
         while self.runningGame:
-            self.screen.fill((135,206,250))
+            self.screen.fill((78,192,202))
 
             for event in pygame.event.get():
                 if event.type == QUIT:
@@ -66,6 +68,8 @@ class GameSession:
 
 
     def Draw(self):
+        self.backDrop.Draw(self.screen)
+
         for pipe in self.pipes:
             pipe.Draw(self.screen)
 
@@ -74,6 +78,8 @@ class GameSession:
         self.bird.Draw(self.screen)
         
         self.score.Draw(self.screen)
+
+        
 
     
     def Die(self):
@@ -92,3 +98,14 @@ class Score:
 
     def Draw(self, screen):
         screen.blit(self.text, (180, 75))
+
+
+class BackDrop(pygame.sprite.Sprite):
+    def __init__(self):
+        super().__init__()
+        self.image = pygame.image.load("resources/background.png").convert_alpha()
+        # self.rect = Rect(0, 0, 400, 600)
+
+    def Draw(self, screen):
+        screen.blit(self.image, (0, 88, 400, 600))
+        screen.blit(self.image, (288, 88, 400, 600))
