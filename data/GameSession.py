@@ -59,6 +59,8 @@ class GameSession:
                     if self.bird.Collide(rect):
                         self.Die()
 
+            self.ground.Update()
+
 
     def Draw(self):
         for pipe in self.pipes:
