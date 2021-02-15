@@ -6,13 +6,12 @@ class Bird:
         self.posX = 160
         self.posY = 300
         self.rect = Rect(self.posX, self.posY, 20, 20)
+        self.dead = False
 
         self.fallingValue = 1
         self.GRAVITY = 1.15
-
         self.isJumping = False
         self.jumpCounterTotal = 2
-
         self.jumpCounter = 0 
 
     def Update(self):
@@ -36,11 +35,14 @@ class Bird:
             self.fallingValue *= self.GRAVITY
 
     def Jump(self):
-        self.isJumping = True
+        if not self.dead:
+            self.isJumping = True
 
     def Collide(self, otherRect):
         if self.rect.colliderect(otherRect):
-            print("Died!")
+            return True
+        else:
+            return False
 
     def Draw(self, screen):
         pygame.draw.rect(screen, (255,255,0), (self.posX, self.posY, 20, 20))

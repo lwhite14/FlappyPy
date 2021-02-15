@@ -47,14 +47,17 @@ class GameSession:
     def Update(self):
         self.bird.Update()
 
-        self.bird.Collide(self.ground.rect)
+        if not self.bird.dead:
+            if self.bird.Collide(self.ground.rect):
+                self.Die()
 
-        for pipe in self.pipes:
-            pipe.Update()
-            if pipe.IsBirdPast(self.bird.posX):
-                self.score.AddScore()
-            for rect in pipe.rects:
-                self.bird.Collide(rect)
+            for pipe in self.pipes:
+                pipe.Update()
+                if pipe.IsBirdPast(self.bird.posX):
+                    self.score.AddScore()
+                for rect in pipe.rects:
+                    if self.bird.Collide(rect):
+                        self.Die()
 
 
     def Draw(self):
@@ -66,6 +69,10 @@ class GameSession:
             pipe.Draw(self.screen)
         
         self.score.Draw(self.screen)
+
+    
+    def Die(self):
+        self.bird.dead = True
 
 
 class Score:
