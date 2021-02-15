@@ -4,8 +4,10 @@ from pygame import Rect
 class Bird(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
-        self.image = pygame.image.load("resources/yellowbird-midflap.png").convert_alpha()
-        self.rect = self.image.get_rect()
+        self.image = [pygame.image.load("resources/yellowbird-midflap.png").convert_alpha(), pygame.image.load("resources/yellowbird-upflap.png").convert_alpha(), pygame.image.load("resources/yellowbird-downflap.png").convert_alpha()]
+        self.rect = self.image[0].get_rect()
+        self.animCounter = 0
+        self.animCounterNextIter = 0
 
         self.posX = 160
         self.posY = 300
@@ -51,5 +53,10 @@ class Bird(pygame.sprite.Sprite):
             return False
 
     def Draw(self, screen):
-        screen.blit(self.image, self.rect)
+        screen.blit(self.image[self.animCounter], self.rect)
+        self.animCounterNextIter += 1
+        if (self.animCounterNextIter % 2) == 0:
+            self.animCounter += 1
+        if self.animCounter == 3:
+            self.animCounter = 0
         #pygame.draw.rect(screen, (255,255,0), (self.posX, self.posY, 20, 20))
