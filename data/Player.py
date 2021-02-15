@@ -1,11 +1,16 @@
 import pygame
 from pygame import Rect
 
-class Bird:
+class Bird(pygame.sprite.Sprite):
     def __init__(self):
+        super().__init__()
+        self.image = pygame.image.load("resources/yellowbird-midflap.png").convert_alpha()
+        self.rect = self.image.get_rect()
+
         self.posX = 160
         self.posY = 300
-        self.rect = Rect(self.posX, self.posY, 20, 20)
+        # self.rect = Rect(self.posX, self.posY, 20, 20)
+        self.rect.x, self.rect.y = self.posX, self.posY
         self.dead = False
 
         self.fallingValue = 1
@@ -18,7 +23,8 @@ class Bird:
         self.Gravity()
 
     def ChangeRect(self):
-        self.rect = Rect(self.posX, self.posY, 20, 20)
+        # self.rect = Rect(self.posX, self.posY, 20, 20)
+        self.rect.x, self.rect.y = self.posX, self.posY
 
     def Gravity(self):
         if self.isJumping:
@@ -45,4 +51,5 @@ class Bird:
             return False
 
     def Draw(self, screen):
-        pygame.draw.rect(screen, (255,255,0), (self.posX, self.posY, 20, 20))
+        screen.blit(self.image, self.rect)
+        #pygame.draw.rect(screen, (255,255,0), (self.posX, self.posY, 20, 20))

@@ -61,12 +61,12 @@ class GameSession:
 
 
     def Draw(self):
-        self.bird.Draw(self.screen)
-
         self.ground.Draw(self.screen)
 
         for pipe in self.pipes:
             pipe.Draw(self.screen)
+
+        self.bird.Draw(self.screen)
         
         self.score.Draw(self.screen)
 
