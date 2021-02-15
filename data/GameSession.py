@@ -1,5 +1,7 @@
 import sys
+import os
 import pygame
+import pygame.freetype
 from pygame.locals import *
 
 from data.Player import Bird
@@ -17,6 +19,7 @@ class GameSession:
         self.bird = Bird()
         self.ground = Ground()
         self.pipes = [Pipe(450), Pipe(650), Pipe(850)]
+        self.score = Score()
 
 
     def GameLoop(self):
@@ -43,17 +46,37 @@ class GameSession:
 
     def Update(self):
         self.bird.Update()
-        for pipe in self.pipes:
-            pipe.Update()
 
         self.bird.Collide(self.ground.rect)
+
         for pipe in self.pipes:
+            pipe.Update()
+            if pipe.IsBirdPast(self.bird.posX):
+                self.score.AddScore()
             for rect in pipe.rects:
                 self.bird.Collide(rect)
 
 
     def Draw(self):
         self.bird.Draw(self.screen)
+
         self.ground.Draw(self.screen)
+
         for pipe in self.pipes:
             pipe.Draw(self.screen)
+        
+        self.score.Draw(self.screen)
+
+
+class Score:
+    def __init__(self):
+        self.score = 0
+        self.font = pygame.font.Font("resources/arcadeclassic.ttf", 45)
+        self.text = self.font.render(str(self.score), 1, (255,255,255))
+
+    def AddScore(self):
+        self.score += 1
+        self.text = self.font.render(str(self.score), 1, (255,255,255))
+
+    def Draw(self, screen):
+        screen.blit(self.text, (180, 75))

@@ -7,8 +7,9 @@ class Pipe:
         self.initialX = initialX
 
         self.speed = 4
-        self.gapSize = 100
+        self.gapSize = 120
         self.rects = self.GeneratePipe(initialX)
+        self.completed = False
 
     def Update(self):
         for rect in self.rects:
@@ -16,6 +17,7 @@ class Pipe:
 
         if self.rects[0].x <= -50:
             self.rects = self.GeneratePipe(550)
+            self.completed = False
 
 
     def GeneratePipe(self, posX):
@@ -23,7 +25,11 @@ class Pipe:
         lowerBound = randomNumber - (self.gapSize / 2)
         upperBound = randomNumber + (self.gapSize / 2)
         return [Rect(posX, 0, 50, lowerBound), Rect(posX, upperBound, 50, 550-upperBound)]
-        
+
+    def IsBirdPast(self, birdX):
+        if birdX > (self.rects[0].x + 50) and self.completed == False:
+            self.completed = True
+            return True
 
     def Draw(self, screen):
         for rect in self.rects:
