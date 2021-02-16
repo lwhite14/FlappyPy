@@ -18,12 +18,7 @@ class GameSession:
         self.width, self.height = 400, 600
         self.screen = pygame.display.set_mode((self.width, self.height))
 
-        self.bird = Bird()
-        self.ground = Ground()
-        self.pipes = [Pipe(450), Pipe(650), Pipe(850)]
-        self.score = Score()
-        self.backDrop = BackDrop()
-        self.deathFlash = None
+        self.SetUpRound()
 
 
     def GameLoop(self):
@@ -34,8 +29,11 @@ class GameSession:
                 if event.type == QUIT:
                     self.runningGame = False
                 if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_SPACE:
-                        self.bird.Jump()
+                    if not self.bird.dead:
+                        if event.key == pygame.K_SPACE:
+                            self.bird.Jump()
+                    else:
+                        self.SetUpRound()
 
             #Update
             self.Update()
@@ -89,8 +87,14 @@ class GameSession:
         if self.deathFlash != None:
             self.deathFlash.Draw(self.screen)
 
-        
 
+    def SetUpRound(self):
+        self.bird = Bird()
+        self.ground = Ground()
+        self.pipes = [Pipe(450), Pipe(650), Pipe(850)]
+        self.score = Score()
+        self.backDrop = BackDrop()
+        self.deathFlash = None
     
     def Die(self):
         self.bird.dead = True
