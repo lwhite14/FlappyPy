@@ -23,6 +23,7 @@ class GameSession:
         self.pipes = [Pipe(450), Pipe(650), Pipe(850)]
         self.score = Score()
         self.backDrop = BackDrop()
+        self.deathFlash = None
 
 
     def GameLoop(self):
@@ -52,7 +53,15 @@ class GameSession:
     def Update(self):
         self.bird.Update()
 
+        if self.deathFlash != None:
+            if not self.deathFlash.alpha == 5:
+                self.deathFlash.Update()
+            else:
+                self.deathFlash = None
+
         if not self.bird.dead:
+            self.ground.Update()
+
             if self.bird.Collide(self.ground.rect):
                 self.Die()
 
@@ -63,8 +72,6 @@ class GameSession:
                 for rect in pipe.rects:
                     if self.bird.Collide(rect):
                         self.Die()
-
-            self.ground.Update()
 
 
     def Draw(self):
@@ -79,11 +86,15 @@ class GameSession:
         
         self.score.Draw(self.screen)
 
+        if self.deathFlash != None:
+            self.deathFlash.Draw(self.screen)
+
         
 
     
     def Die(self):
         self.bird.dead = True
+        self.deathFlash = DeathFlash()
 
 
 class Score:
@@ -109,3 +120,19 @@ class BackDrop(pygame.sprite.Sprite):
     def Draw(self, screen):
         screen.blit(self.image, (0, 88, 400, 600))
         screen.blit(self.image, (288, 88, 400, 600))
+
+
+class DeathFlash:
+    def __init__(self):
+        self.alpha = 255
+        self.flashSurface = pygame.Surface((1000,750), pygame.SRCALPHA)   # per-pixel alpha
+        self.flashSurface.fill((255, 255, 255, self.alpha))                         # notice the alpha value in the color
+        # windowSurface.blit(self.flashSurface, (0,0))
+
+    def Update(self):
+        self.alpha -= 10
+        self.flashSurface.fill((255, 255, 255, self.alpha))  
+
+    def Draw(self, screen):
+        # pygame.rect.draw(screen, (255, 255, 255), self.rect)
+        screen.blit(self.flashSurface, (0,0))
