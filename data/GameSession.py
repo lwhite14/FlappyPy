@@ -18,6 +18,7 @@ class GameSession:
         self.width, self.height = 400, 600
         self.screen = pygame.display.set_mode((self.width, self.height))
 
+        self.score = Score()
         self.SetUpRound()
 
 
@@ -92,27 +93,43 @@ class GameSession:
         self.bird = Bird()
         self.ground = Ground()
         self.pipes = [Pipe(450), Pipe(650), Pipe(850)]
-        self.score = Score()
         self.backDrop = BackDrop()
         self.deathFlash = None
+        self.score.scoreCurrent = 0
+        self.score.FormatScore()
     
     def Die(self):
         self.bird.dead = True
+        self.score.HighScore()
         self.deathFlash = DeathFlash()
 
 
 class Score:
     def __init__(self):
-        self.score = 0
-        self.font = pygame.font.Font("resources/arcadeclassic.ttf", 45)
-        self.text = self.font.render(str(self.score), 1, (255,255,255))
+        self.scoreCurrent = 0
+        self.scoreHigh = 0
+        self.fontCurrent = pygame.font.Font("resources/arcadeclassic.ttf", 45)
+        self.fontHigh = pygame.font.Font("resources/arcadeclassic.ttf", 30)
+        self.textCurrent = self.fontCurrent.render(str(self.scoreCurrent), 1, (255,255,255))
+        self.textHigh = self.fontHigh.render(str(self.scoreHigh), 1, (255,255,255))
 
     def AddScore(self):
-        self.score += 1
-        self.text = self.font.render(str(self.score), 1, (255,255,255))
+        self.scoreCurrent += 1
+        self.FormatScore()
+
+    def FormatScore(self):
+        self.textCurrent = self.fontCurrent.render(str(self.scoreCurrent), 1, (255,255,255))
+        self.textHigh = self.fontHigh.render(str(self.scoreHigh), 1, (255,255,255))
+
+    def HighScore(self):
+        if self.scoreCurrent > self.scoreHigh:
+            self.scoreHigh = self.scoreCurrent
+        self.FormatScore()
+
 
     def Draw(self, screen):
-        screen.blit(self.text, (180, 75))
+        screen.blit(self.textCurrent, (180, 75))
+        screen.blit(self.textHigh, (183, 110))
 
 
 class BackDrop(pygame.sprite.Sprite):
